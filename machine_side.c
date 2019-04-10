@@ -1,10 +1,24 @@
+/* 
+The Machine side code. Pin descriptions as follows:
+suc - controls the suction cup action ON/OFF
+vcyla - controls downward movement of vertical cylinder
+vcylb - controls upward movement of vertical cylinder 
+hcyl - controls movement of the horizontal cylinder 
+listenn - interrupt pin to 'listen' from ESP and connected to the 'approach' pin of ESP
+approach - output pin connected to 'listenn' of ESP
+ir1 - trigger of first infrared sensor
+ir2 - trigger of second infrared sensor 
+*/
+
+
+
 #include "HX711.h"  //load cell library 
  
 #define DOUT  10 
 #define CLK  9
  
 HX711 scale(DOUT, CLK);
-float calibration_factor = -727610; // This worked when I calibrated using calibrated weights  
+float calibration_factor = -727610; // This worked when I calibrated with my Load cell (max. 3kg) 
  
 
 
@@ -18,7 +32,7 @@ int a=0;
 
 void routine()
 {
-  call=1;
+  call=1; // Communication without interrupting the cylinder movement 
 }
 
 
@@ -40,9 +54,9 @@ digitalWrite(8,HIGH);
 digitalWrite(11,LOW);
    
 scale.tare();             //Reset the scale to 0  
-scale.set_scale(calibration_factor); //Adjust to this calibration factor
+scale.set_scale(calibration_factor);   //Adjust to this calibration factor
 
-// configure the pin directions   
+// configure the pin directions for solenoid valves 
 pinMode(suc,OUTPUT);
 pinMode(vcylb,OUTPUT);
 pinMode(vcyla,OUTPUT);
@@ -60,7 +74,7 @@ void loop()
 {
 String  ip_command="";
 
-if(!digitalRead(ir2)&& !digitalRead(ir1))
+if(!digitalRead(ir2)&& !digitalRead(ir1)) // sense the Chub 
 {
   count=1;
 }
@@ -96,7 +110,7 @@ delay(3000);
 }
 
 
-if(call == 1)
+if(call == 1)  // communicates if there was an interrupt signal in cycle
 {
   char temp;
   call=0;
@@ -125,7 +139,7 @@ digitalWrite(approach,HIGH);
 }
 }
 
-
+// vertical cylinder movement as functions 
 
 void down()
 {
