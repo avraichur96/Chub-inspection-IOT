@@ -43,8 +43,8 @@ Serial communication is the main protocol used for communication. There are stil
 Thus, 'approach' and 'listenn' pins are introduced (basically Rx and Tx pins of Serial communication) 
 Arduino can request for delay, drop by its approach(Tx) pin and wait for response from ESP through the listenn(Rx) pin. The reverse applies to ESP. The connection are shown below for clarity- 
                     
-                  *Arduino (Rx or listenn)  ----------- > ESP (Tx or approach)*
-                  *Arduino (Tx or approach) ----------- > ESP (Rx or listenn)*
+                  Arduino (Rx or listenn)  ----------- > ESP (Tx or approach)
+                  Arduino (Tx or approach) ----------- > ESP (Rx or listenn)
                   
                   
                   
