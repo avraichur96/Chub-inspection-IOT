@@ -180,26 +180,27 @@ server.send(200,"text/html",l);
 void loadwt()
 
 {
-String temp="P"; // ask arduino for weights 
-digitalWrite(approach,LOW);
+String temp="P"; 
+digitalWrite(approach,LOW); // ask arduino for weights with approach pin 
 delay(50);
 digitalWrite(approach,HIGH);
 
 Serial.println(temp);
 temp = "";
-while(digitalRead(listenn))
+while(digitalRead(listenn)) // wait for the listenn pin to get HIGH (waiting for Arduino)
 {
   
 }
-while(!Serial.available())
+while(!Serial.available()) // wait for data in the serial buffer 
 {
 
  
 }
+// store only one weight for every call (max. 10 weights) 
 temp = Serial.readStringUntil('N');
 weight[p] = temp.toInt();
 temp = "";
-p--;
+p--;         
 if(p<=0)
 {
   p=9;
@@ -214,7 +215,7 @@ void setup() {
   
   pinMode(listenn,INPUT_PULLUP);
   pinMode(approach,OUTPUT);
-  digitalWrite(approach,HIGH);
+  digitalWrite(approach,HIGH);  // default HIGH when weights are not needed
   Serial.begin(9600);
   Serial.println();
   Serial.print("Configuring access point...");
